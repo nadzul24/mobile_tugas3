@@ -1,7 +1,8 @@
-// import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'input.dart';
+import 'hasil.dart';
+import 'convert.dart';
 
 void main() {
   runApp(my());
@@ -13,14 +14,15 @@ class my extends StatefulWidget {
 }
 
 class myState extends State<my> {
+  TextEditingController inCelcius = new TextEditingController();
+
   double _inputUser = 0;
   double _kelvin = 0;
   double _reamur = 0;
-  final inputController = TextEditingController();
 
-  void hitungSuhu() {
+  void _hitungSuhu() {
     setState(() {
-      _inputUser = double.parse(inputController.text);
+      _inputUser = double.parse(inCelcius.text);
       _kelvin = _inputUser + 273;
       _reamur = (4 / 5) * _inputUser;
     });
@@ -41,54 +43,12 @@ class myState extends State<my> {
         body: Container(
           margin: EdgeInsets.all(8),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Center(
-                child: TextFormField(
-                    controller: inputController,
-                    decoration: InputDecoration(
-                        hintText: "Masukkan Suhu dalam Celcius"),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9+\.]')),
-                    ],
-                    keyboardType: TextInputType.numberWithOptions(
-                        decimal: true, signed: false)),
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [Text("Suhu dalam Kelvin"), Text("$_kelvin")],
-                      ),
-                      margin: EdgeInsets.all(8),
-                    ),
-                    Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [Text("Suhu dalam Reamur"), Text("$_reamur")],
-                      ),
-                      margin: EdgeInsets.all(8),
-                    ),
-                  ],
-                ),
-              ),
-              RaisedButton(
-                textColor: Colors.white,
-                onPressed: () {
-                  hitungSuhu();
-                  // setState(() {
-                  //   test = double.perse(suhuController.text) + 1;
-                  // });
-                },
-                color: Colors.blueAccent,
-                child:
-                    const Text("Konversi Suhu", style: TextStyle(fontSize: 20)),
-              ),
-            ],
-          ),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Input(inCelcius: inCelcius),
+                hasil(kelvin: _kelvin, reamur: _reamur),
+                Convert(hitungSuhu: _hitungSuhu),
+              ]),
         ),
       ),
     );
